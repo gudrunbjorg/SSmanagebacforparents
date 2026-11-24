@@ -1,751 +1,510 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Managebac Guide - Senior School</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>ManageBac Guide for Parents · Senior School · Prem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap">
+<style>
+  /* Same tokens as the Prem Staff Portal sign-in page:
+     the campus photo is the page, the content sits on quiet white panels. */
+  :root{
+    --ink:#1A2420;
+    --muted:#5F6E65;
+    --green:#1E5A3A;
+    --green-deep:#14382A;
+    --accent:#41A949;
+    --gold:#DCB042;
+    --line:#E1E7E3;
+    --tint:#F2F7F3;
+    --font:'Montserrat','Segoe UI',Arial,sans-serif;
+  }
 
-        :root {
-            --bg-color: #fdfbf7; /* Soft Ivory Background */
-            --sidebar-bg: #071510; /* Forest Green Dark Sidebar */
-            --card-bg: #122b22; /* Forest Green Cards */
-            --card-hover: #193a2e;
-            --accent-green: #2ea071;
-            --accent-badge: #1a4d38;
-            --text-main: #f0f4f2;
-            --text-dark: #122b22;
-            --text-muted: #a3b8ac;
-            --text-muted-dark: #5c6e65;
-            --border-color: #1a382c;
-            --border-light: #e2ddd5;
-        }
+  *{box-sizing:border-box;}
+  html,body{margin:0; padding:0;}
+  body{
+    min-height:100dvh;
+    display:grid;
+    grid-template-rows:1fr auto auto;
+    font-family:var(--font);
+    font-size:15px;
+    line-height:1.5;
+    color:var(--ink);
+    background:var(--green-deep);
+    -webkit-font-smoothing:antialiased;
+  }
+  body.is-locked{overflow:hidden;}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  /* ---------- the campus ---------- */
+  .scene{position:fixed; inset:0; z-index:0; overflow:hidden; background:var(--green-deep);}
+  .scene-photo{
+    display:block; width:100%; height:100%;
+    object-fit:cover; object-position:50% 42%;
+    background-size:cover; background-position:50% 42%;
+  }
+  .scene-shade{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(20,56,42,.12) 0%, rgba(20,56,42,0) 30%, rgba(20,56,42,.62) 100%);
+  }
 
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+  /* ---------- the panel ---------- */
+  .panel{
+    position:relative; z-index:1;
+    width:min(720px, calc(100% - 32px));
+    justify-self:center; align-self:center;
+    margin:48px 0 24px;
+    padding:36px 36px 30px;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 30px 70px -28px rgba(8,28,18,.6), 0 1px 0 rgba(255,255,255,.6) inset;
+  }
+  .intro{text-align:center; max-width:520px; margin:0 auto 30px;}
+  .crest{display:block; width:72px; height:auto; margin:0 auto 18px;}
+  h1{margin:0 0 8px; font-size:26px; font-weight:700; line-height:1.15; letter-spacing:-.015em;}
+  .lede{margin:0; color:var(--muted); font-size:15px; font-weight:500;}
 
-        /* Sidebar Navigation */
-        aside {
-            width: 260px;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            flex-shrink: 0;
-            color: var(--text-main);
-            transition: all 0.3s ease;
-        }
+  h2{margin:0 0 12px; font-size:16px; font-weight:700; letter-spacing:-.005em;}
 
-        .brand-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
+  /* topics */
+  .topics{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .topic{
+    width:100%; height:100%;
+    display:flex; align-items:flex-start; gap:14px;
+    padding:14px 16px;
+    background:#fff; color:inherit;
+    border:1px solid var(--line); border-radius:10px;
+    font:inherit; text-align:left; cursor:pointer;
+    transition:border-color .15s, background-color .15s;
+  }
+  .topic:hover{border-color:var(--green); background:var(--tint);}
+  .badge{
+    flex:none; width:36px; height:36px;
+    display:grid; place-items:center;
+    border-radius:8px;
+    background:var(--tint); color:var(--green);
+    font-size:12.5px; font-weight:700; letter-spacing:.02em;
+  }
+  .topic:hover .badge{background:var(--green); color:#fff;}
+  .topic-title{display:block; font-size:15px; font-weight:600; line-height:1.3;}
+  .topic-desc{display:block; margin-top:3px; font-size:13px; font-weight:500; color:var(--muted); line-height:1.45;}
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+  /* useful links */
+  .links{margin-top:28px; padding-top:24px; border-top:1px solid var(--line);}
+  .link-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:2px 24px;}
+  .link-list a, .link-list button{
+    display:inline-block; padding:6px 0;
+    background:none; border:0; cursor:pointer;
+    font:inherit; font-size:14px; font-weight:600; text-align:left;
+    color:var(--green); text-decoration:underline; text-decoration-color:rgba(30,90,58,.3);
+    text-underline-offset:3px;
+  }
+  .link-list a:hover, .link-list button:hover{text-decoration-color:var(--green);}
+  .ext{font-weight:500; color:var(--muted); margin-left:2px;}
+  .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
 
-        .brand-logo-img {
-            width: 36px;
-            height: 36px;
-            object-fit: contain;
-            border-radius: 6px;
-        }
+  /* ---------- the footer line ---------- */
+  .foot{
+    position:relative; z-index:1;
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px;
+    padding:18px 24px 20px;
+    color:rgba(255,255,255,.92);
+    font-size:13px; font-weight:500;
+    text-shadow:0 1px 2px rgba(0,0,0,.45);
+  }
+  .foot a{color:#fff; font-weight:600; text-underline-offset:3px;}
+  .proud-band{
+    position:relative; z-index:1;
+    background:#234635; color:#fff; text-align:center; padding:14px 16px;
+    font-weight:700; font-size:15px; letter-spacing:.14em;
+  }
 
-        .brand-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            line-height: 1.2;
-        }
+  /* ---------- slide drawer ---------- */
+  .drawer-overlay{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(20,56,42,.55);
+    opacity:0; visibility:hidden;
+    transition:opacity .25s ease, visibility .25s ease;
+  }
+  .drawer-overlay.active{opacity:1; visibility:visible;}
 
-        .brand-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
+  .drawer{
+    position:fixed; top:0; right:0; z-index:101;
+    width:min(780px, 100vw); height:100dvh;
+    background:#fff; color:var(--ink);
+    box-shadow:-30px 0 70px -28px rgba(8,28,18,.6);
+    transform:translateX(100%); visibility:hidden;
+    transition:transform .3s cubic-bezier(.2,.7,.2,1), visibility .3s;
+    display:flex; flex-direction:column;
+  }
+  .drawer.active{transform:none; visibility:visible;}
 
-        /* Mobile Menu Toggle Button */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-main);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 4px;
-        }
+  .drawer-head{
+    display:flex; align-items:center; gap:14px;
+    padding:22px 32px;
+    border-bottom:1px solid var(--line);
+  }
+  .drawer-title{margin:0; flex:1; font-size:21px; font-weight:700; letter-spacing:-.01em; line-height:1.2;}
+  .drawer-close{
+    flex:none; width:40px; height:40px;
+    display:grid; place-items:center;
+    background:none; border:1px solid var(--line); border-radius:8px;
+    color:var(--muted); font:inherit; font-size:22px; line-height:1; cursor:pointer;
+  }
+  .drawer-close:hover{color:var(--ink); border-color:var(--muted);}
 
-        .nav-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
+  .drawer-content{
+    flex:1; overflow-y:auto;
+    padding:24px 32px 40px;
+    font-size:14.5px; line-height:1.65; color:var(--ink);
+  }
+  .drawer-content p{margin:0 0 12px; max-width:62ch;}
+  .drawer-content ul{margin:4px 0 16px; padding-left:20px; max-width:62ch;}
+  .drawer-content li{margin-bottom:8px;}
+  .drawer-content li::marker{color:var(--accent);}
+  .drawer-content strong{font-weight:600;}
+  .drawer-content a{color:var(--green); font-weight:600; text-underline-offset:3px;}
 
-        .nav-section {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+  .btn-action{
+    display:inline-block; margin:6px 0 4px;
+    padding:11px 18px;
+    background:var(--green); color:#fff !important;
+    border-radius:8px; text-decoration:none;
+    font-size:14px; font-weight:600;
+  }
+  .btn-action:hover{background:var(--green-deep);}
 
-        .nav-label {
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
+  .slides-heading{margin:28px 0 4px; font-size:15px; font-weight:700;}
+  .slides-hint{margin:0 0 14px; font-size:13px; color:var(--muted);}
 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            border-radius: 6px;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
+  .slide-preview{
+    display:block; width:100%; height:auto;
+    margin:0 0 18px;
+    border:1px solid var(--line); border-radius:10px;
+    background:var(--tint);
+    cursor:zoom-in;
+    transition:border-color .15s;
+  }
+  .slide-preview:hover{border-color:var(--green);}
 
-        .nav-link:hover, .nav-link.active {
-            background-color: var(--card-bg);
-            color: var(--text-main);
-        }
+  /* ---------- enlarged slide ---------- */
+  .image-modal{
+    position:fixed; inset:0; z-index:200;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(10,28,20,.92);
+    opacity:0; visibility:hidden;
+    transition:opacity .2s ease, visibility .2s;
+    cursor:zoom-out;
+  }
+  .image-modal.active{opacity:1; visibility:visible;}
+  .image-modal img{max-width:92vw; max-height:88vh; border-radius:10px; background:#fff;}
 
-        /* Main Content Area */
-        main {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-            background-color: var(--bg-color);
-        }
+  /* ---------- a11y and motion ---------- */
+  :focus-visible{outline:3px solid var(--accent); outline-offset:3px; border-radius:6px;}
+  @media (prefers-reduced-motion: no-preference){
+    .panel{animation:rise .55s cubic-bezier(.2,.7,.2,1) both;}
+    @keyframes rise{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .drawer, .drawer-overlay, .image-modal{transition:none;}
+  }
 
-        /* Hero Banner */
-        .hero-banner {
-            background: linear-gradient(135deg, #103829 0%, #081d14 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 32px;
-            margin-bottom: 32px;
-            color: #ffffff;
-            box-shadow: 0 4px 16px rgba(18, 43, 34, 0.08);
-        }
-
-        .hero-banner h1 {
-            font-size: 1.85rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-            color: #ffffff;
-        }
-
-        .hero-banner p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            max-width: 700px;
-            line-height: 1.5;
-        }
-
-        /* Section Styling */
-        .section-header {
-            margin-bottom: 24px;
-        }
-
-        .section-header h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .section-header p {
-            font-size: 0.9rem;
-            color: var(--text-muted-dark);
-        }
-
-        /* Grid System (3 per row) */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            color: var(--text-main);
-            box-shadow: 0 4px 12px rgba(18, 43, 34, 0.12);
-        }
-
-        .card:hover {
-            background-color: var(--card-hover);
-            transform: translateY(-4px);
-            border-color: var(--accent-green);
-            box-shadow: 0 12px 24px rgba(18, 43, 34, 0.2);
-        }
-
-        .badge {
-            width: 36px;
-            height: 36px;
-            background-color: var(--accent-badge);
-            color: var(--accent-green);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        .card-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-        }
-
-        .card-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.45;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* Slide-over Drawer */
-        .drawer-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(7, 21, 16, 0.7);
-            backdrop-filter: blur(4px);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .drawer-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .drawer {
-            position: fixed;
-            top: 0;
-            right: -850px;
-            width: 850px;
-            max-width: 100vw;
-            height: 100vh;
-            background-color: var(--card-bg);
-            border-left: 1px solid var(--border-color);
-            padding: 32px;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-            transition: right 0.3s ease;
-            z-index: 101;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
-            color: var(--text-main);
-        }
-
-        .drawer.active {
-            right: 0;
-        }
-
-        .drawer-close {
-            align-self: flex-end;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.6rem;
-            cursor: pointer;
-        }
-
-        .drawer-close:hover {
-            color: var(--text-main);
-        }
-
-        .drawer-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .drawer-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .drawer-content {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .drawer-content ul {
-            margin-left: 20px;
-            margin-top: 10px;
-            margin-bottom: 15px;
-        }
-
-        .drawer-content li {
-            margin-bottom: 8px;
-        }
-
-        .drawer-content strong {
-            color: var(--text-main);
-        }
-
-        .slide-preview {
-            width: 100%;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            margin-top: 12px;
-            margin-bottom: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            cursor: zoom-in;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .slide-preview:hover {
-            transform: scale(1.01);
-            border-color: var(--accent-green);
-        }
-
-        .caption-text {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            font-style: italic;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .btn-action {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 16px;
-            background-color: var(--accent-green);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .btn-action:hover {
-            opacity: 0.9;
-        }
-
-        /* Lightbox Modal */
-        .image-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.25s ease;
-            cursor: zoom-out;
-        }
-
-        .image-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .image-modal img {
-            max-width: 90vw;
-            max-height: 85vh;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-
-        /* ===================================================
-           RESPONSIVE MOBILE & TABLET STYLES
-           =================================================== */
-
-        @media (max-width: 1024px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-
-            aside {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-                padding: 16px;
-                gap: 0;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .nav-wrapper {
-                display: none;
-                flex-direction: column;
-                gap: 16px;
-                margin-top: 16px;
-                padding-top: 16px;
-                border-top: 1px solid var(--border-color);
-            }
-
-            .nav-wrapper.active {
-                display: flex;
-            }
-
-            main {
-                padding: 20px 16px;
-            }
-
-            .hero-banner {
-                padding: 20px;
-                margin-bottom: 20px;
-            }
-
-            .hero-banner h1 {
-                font-size: 1.4rem;
-            }
-
-            .grid-container {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .drawer {
-                width: 100vw;
-                max-width: 100vw;
-                right: -100vw;
-                padding: 20px 16px;
-            }
-        }
-    </style>
+  /* ---------- small screens ---------- */
+  @media (max-width:640px){
+    .scene-photo{object-position:36% 50%; background-position:36% 50%;}
+    .panel{width:calc(100% - 28px); margin:36px 0 20px; padding:30px 20px 26px;}
+    h1{font-size:23px;}
+    .topics, .link-list{grid-template-columns:1fr;}
+    .foot{flex-direction:column; align-items:center; text-align:center; gap:4px;}
+    .drawer-head{padding:16px 18px;}
+    .drawer-content{padding:20px 18px 32px;}
+  }
+</style>
 </head>
 <body>
 
-    <!-- Sidebar Navigation -->
-    <aside>
-        <div class="brand-container">
-            <div class="brand">
-                <img src="images/prem_logo.jpg" alt="Prem Logo" class="brand-logo-img">
-                <div>
-                    <div class="brand-title">Managebac Guide</div>
-                    <div class="brand-subtitle">Senior School</div>
-                </div>
-            </div>
-            <button class="menu-toggle" id="menuToggle" onclick="toggleMobileMenu()">☰</button>
-        </div>
+<!-- Campus photo. Replace images/campus.jpg with your own photo. The tiny blurred
+     image in the style attribute shows while the real photo loads. -->
+<div class="scene" aria-hidden="true">
+  <img class="scene-photo"
+       src="images/campus.jpg"
+       alt=""
+       fetchpriority="high"
+       style="background-image:url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAAQABgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwC6fGDhC3lCnxeNAzhSgBNceUaNgXyQOoosoYZ5R8xBZsVKqRlszLVHokPiISc7gKK5JbFoGIV2I9KK2+rVuxn9bpbNn//Z)">
+  <div class="scene-shade"></div>
+</div>
 
-        <div class="nav-wrapper" id="navWrapper">
-            <div class="nav-section">
-                <div class="nav-label">NAVIGATE</div>
-                <a href="#" class="nav-link active">Dashboard</a>
-                <a href="https://help.managebac.com/hc/en-us/categories/20128383486361-Parent-Help" target="_blank" rel="noopener" class="nav-link">ManageBac Help Center ↗</a>
-                <a href="https://ptis.schoolsbuddy.net" target="_blank" rel="noopener" class="nav-link">SchoolsBuddy ↗</a>
-            </div>
+<main class="panel">
+  <header class="intro">
+    <img class="crest" src="images/prem-crest.png" alt="Prem International School crest" width="72" height="76">
+    <h1>ManageBac guide for parents</h1>
+    <p class="lede">How to follow your child’s learning in the Senior School at Prem Tinsulanonda International School.</p>
+  </header>
 
-            <div class="nav-section">
-                <div class="nav-label">SUPPORT HUB</div>
-                <a href="https://ptis.managebac.com" target="_blank" rel="noopener" class="nav-link">ManageBac Portal ↗</a>
-                <a href="https://sites.google.com/ptis.ac.th/premcommunityhandbookonline?usp=sharing" target="_blank" rel="noopener" class="nav-link">Prem Community Handbook ↗</a>
-                <a href="https://docs.google.com/document/d/1tZ7r3axHLaEqbcWVyPGwLe2Q-uQZF7y9B9XjX-bHgss/edit?usp=sharing" target="_blank" rel="noopener" class="nav-link">Prem Events Master Calendar ↗</a>
-                <a class="nav-link" onclick="openDrawer('contact')">Contact School Office</a>
-            </div>
-        </div>
-    </aside>
+  <section aria-labelledby="topicsHeading">
+    <h2 id="topicsHeading">Choose a topic</h2>
+    <ul class="topics">
+      <li><button class="topic" type="button" data-topic="la">
+        <span class="badge" aria-hidden="true">LA</span>
+        <span><span class="topic-title">Login and access</span>
+        <span class="topic-desc">Portal address and first-time sign-in in a web browser.</span></span>
+      </button></li>
+      <li><button class="topic" type="button" data-topic="at">
+        <span class="badge" aria-hidden="true">AT</span>
+        <span><span class="topic-title">Attendance and timetables</span>
+        <span class="topic-desc">Class schedules, daily attendance and attendance codes.</span></span>
+      </button></li>
+      <li><button class="topic" type="button" data-topic="th">
+        <span class="badge" aria-hidden="true">TH</span>
+        <span><span class="topic-title">Tasks and homework</span>
+        <span class="topic-desc">Class tasks and homework deadlines.</span></span>
+      </button></li>
+      <li><button class="topic" type="button" data-topic="gr">
+        <span class="badge" aria-hidden="true">GR</span>
+        <span><span class="topic-title">Grades and reports</span>
+        <span class="topic-desc">Live criterion grades, unit overviews and PDF term reports.</span></span>
+      </button></li>
+      <li><button class="topic" type="button" data-topic="bn">
+        <span class="badge" aria-hidden="true">BN</span>
+        <span><span class="topic-title">Behaviour notes</span>
+        <span class="topic-desc">Logged achievements, positive choices and support notes.</span></span>
+      </button></li>
+      <li><button class="topic" type="button" data-topic="cs">
+        <span class="badge" aria-hidden="true">CS</span>
+        <span><span class="topic-title">Child switcher</span>
+        <span class="topic-desc">Move between siblings on desktop and mobile.</span></span>
+      </button></li>
+    </ul>
+  </section>
 
-    <!-- Main Content -->
-    <main>
-        <div class="hero-banner">
-            <h1>Welcome to the ManageBac Guide for Parents</h1>
-            <p>Access key tools, instructions, and features for tracking your child's academic progress in the Senior School at Prem Tinsulanonda International School.</p>
-        </div>
+  <section class="links" aria-labelledby="linksHeading">
+    <h2 id="linksHeading">Useful links</h2>
+    <ul class="link-list">
+      <li><a href="https://ptis.managebac.com" target="_blank" rel="noopener">ManageBac portal<span class="ext" aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span></a></li>
+      <li><a href="https://help.managebac.com/hc/en-us/categories/20128383486361-Parent-Help" target="_blank" rel="noopener">ManageBac Help Centre<span class="ext" aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span></a></li>
+      <li><a href="https://ptis.schoolsbuddy.net" target="_blank" rel="noopener">SchoolsBuddy<span class="ext" aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span></a></li>
+      <li><a href="https://sites.google.com/ptis.ac.th/premcommunityhandbookonline?usp=sharing" target="_blank" rel="noopener">Prem Community Handbook<span class="ext" aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span></a></li>
+      <li><a href="https://docs.google.com/document/d/1tZ7r3axHLaEqbcWVyPGwLe2Q-uQZF7y9B9XjX-bHgss/edit?usp=sharing" target="_blank" rel="noopener">Prem Events Master Calendar<span class="ext" aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span></a></li>
+      <li><button type="button" data-topic="contact">Contact the Senior School office</button></li>
+    </ul>
+  </section>
+</main>
 
-        <div class="section-header">
-            <h2>Quick Access</h2>
-            <p>Select a card below to view specific guidelines and reference details.</p>
-        </div>
+<footer class="foot">
+  <span>Prem International School, Chiang Mai</span>
+  <span>Questions? Email <a href="mailto:secretaryss@ptis.ac.th">secretaryss@ptis.ac.th</a></span>
+</footer>
+<div class="proud-band" aria-hidden="true">#PROUDTOBEPREM</div>
 
-        <div class="grid-container">
-            <div class="card" onclick="openDrawer('la')">
-                <div class="badge">LA</div>
-                <div class="card-title">Login & Access</div>
-                <div class="card-desc">Portal URLs, China endpoints, and first-time browser sign-in setups.</div>
-            </div>
+<!-- Slide drawer -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <div class="drawer-head">
+    <span class="badge" id="drawerBadge" aria-hidden="true">--</span>
+    <h2 class="drawer-title" id="drawerTitle">Title</h2>
+    <button class="drawer-close" id="drawerClose" type="button" aria-label="Close">&times;</button>
+  </div>
+  <div class="drawer-content" id="drawerContent"></div>
+</div>
 
-            <div class="card" onclick="openDrawer('at')">
-                <div class="badge">AT</div>
-                <div class="card-title">Attendance & Timetables</div>
-                <div class="card-desc">View class schedules, daily attendance, and submit excusal requests.</div>
-            </div>
+<!-- Enlarged slide -->
+<div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Enlarged slide">
+  <img id="zoomedImg" src="" alt="">
+</div>
 
-            <div class="card" onclick="openDrawer('th')">
-                <div class="badge">TH</div>
-                <div class="card-title">Tasks & Homework</div>
-                <div class="card-desc">Track class tasks and homework deadlines.</div>
-            </div>
+<script>
+  // Builds the "Reference slides" block. To change slides, edit the file lists below.
+  function slides(list){
+    return `
+      <h3 class="slides-heading">Reference slides</h3>
+      <p class="slides-hint">Select a slide to enlarge it.</p>
+      ${list.map(([src, alt]) =>
+        `<img src="${src}" class="slide-preview" alt="${alt}" tabindex="0" role="button">`
+      ).join('')}`;
+  }
 
-            <div class="card" onclick="openDrawer('gr')">
-                <div class="badge">GR</div>
-                <div class="card-title">Grading & Reports</div>
-                <div class="card-desc">Real-time criterion assessment graphs and official PDF reports.</div>
-            </div>
+  const cardDetails = {
+    contact: {
+      badge: 'CO',
+      title: 'Contact the Senior School office',
+      content: `
+        <p>Contact our Senior School secretary, Khun Kib, at <a href="mailto:secretaryss@ptis.ac.th">secretaryss@ptis.ac.th</a>, or by phone on <strong>(053) 301500, ext. 5300</strong>.</p>`
+    },
+    la: {
+      badge: 'LA',
+      title: 'Login and access',
+      content: `
+        <p>Sign in to ManageBac with your registered parent email address.</p>
+        <ul>
+          <li><strong>Web address:</strong> sign in at <a href="https://ptis.managebac.com" target="_blank" rel="noopener">ptis.managebac.com</a>.</li>
+          <li><strong>Sign-in options:</strong> use the email address the school holds for you, or choose <em>Sign in with Google or Microsoft</em>.</li>
+          <li><strong>Mobile app:</strong> your first sign-in must be in a web browser. After that, you can use the app.</li>
+        </ul>
+        <a href="https://ptis.managebac.com" target="_blank" rel="noopener" class="btn-action">Open the ManageBac portal</a>
+        ${slides([
+          ['images/login.jpg', 'Login slide 1'],
+          ['images/login-2.jpg', 'Login slide 2']
+        ])}`
+    },
+    at: {
+      badge: 'AT',
+      title: 'Attendance and timetables',
+      content: `
+        <p>See your child’s daily attendance, lesson attendance codes and weekly timetable on desktop and mobile.</p>
+        <ul>
+          <li><strong>Daily and lesson tracking:</strong> attendance is taken in homeroom every morning and in every lesson.</li>
+          <li><strong>Attendance codes and comments:</strong> each entry shows a status such as Present, Absent, Late, Off-campus activity or Medical centre.</li>
+          <li><strong>On mobile:</strong> tap <em>Attendance &amp; Timetable</em> on the main menu for homeroom and weekly summaries.</li>
+          <li><strong>Switching views:</strong> choose <em>Calendar</em> or <em>Timetables</em> at the top of the mobile screen.</li>
+          <li><strong>Printing:</strong> use <em>Export Timetables to PDF</em> to print or save the timetable.</li>
+        </ul>
+        ${slides([
+          ['images/attendance.jpg', 'Attendance slide 1'],
+          ['images/attendance-2.jpg', 'Attendance slide 2'],
+          ['images/timetables.jpg', 'Timetables slide 1'],
+          ['images/timetables-2.jpg', 'Timetables slide 2']
+        ])}`
+    },
+    th: {
+      badge: 'TH',
+      title: 'Tasks and homework',
+      content: `
+        <p>Follow deadlines, class assignments and online lesson resources.</p>
+        <ul>
+          <li><strong>Desktop calendar:</strong> the weekly calendar is on your child’s front page. Select <em>View All</em> for the full list.</li>
+          <li><strong>On mobile:</strong> tap <em>Tasks &amp; Deadlines</em> on the main menu to see deadlines across all subjects.</li>
+          <li><strong>Tasks and homework:</strong> homework has a set deadline by default.</li>
+          <li><strong>Task details:</strong> hover over a task on desktop, or tap it on mobile, to see what is required.</li>
+        </ul>
+        ${slides([
+          ['images/tasks.jpg', 'Tasks slide 1'],
+          ['images/tasks-1.jpg', 'Tasks slide 2'],
+          ['images/tasks-2.jpg', 'Tasks slide 3'],
+          ['images/tasks-3.jpg', 'Tasks slide 4'],
+          ['images/tasks-4.jpg', 'Tasks slide 5'],
+          ['images/tasks-5.jpg', 'Tasks slide 6']
+        ])}`
+    },
+    gr: {
+      badge: 'GR',
+      title: 'Grades and term reports',
+      content: `
+        <p>Follow learning progress through criterion grades, unit overviews and official PDF term reports.</p>
+        <ul>
+          <li><strong>Live grades:</strong> grades appear as soon as teachers publish them.</li>
+          <li><strong>On mobile:</strong> go to <em>Classes &gt; Assessment Grades</em> and choose a term or semester.</li>
+          <li><strong>Units and curriculum:</strong> each subject unit shows its inquiry concepts, ATL (Approaches to Learning) skills and assessment criteria.</li>
+          <li><strong>Downloading reports:</strong> past PDF reports are in <em>Student Profile &gt; Reports</em>.</li>
+        </ul>
+        ${slides([
+          ['images/grading.jpg', 'Grading slide 1'],
+          ['images/grading-2.jpg', 'Grading slide 2'],
+          ['images/grading-3.jpg', 'Grading slide 3'],
+          ['images/grading-4.jpg', 'Grading slide 4'],
+          ['images/grading-5.jpg', 'Grading slide 5'],
+          ['images/grading-6.jpg', 'Grading slide 6'],
+          ['images/reports.jpg', 'Reports slide 1'],
+          ['images/reports-2.jpg', 'Reports slide 2']
+        ])}`
+    },
+    bn: {
+      badge: 'BN',
+      title: 'Behaviour notes',
+      content: `
+        <p>ManageBac includes a record of student behaviour, used in line with Prem’s pastoral policy.</p>
+        <ul>
+          <li><strong>What is recorded:</strong> outstanding positive choices and areas where a student needs guidance.</li>
+          <li><strong>A support tool:</strong> it is used for pastoral care. It is not a disciplinary transcript.</li>
+          <li><strong>Yearly reset:</strong> all notes are cleared at the start of each academic year.</li>
+          <li><strong>Where to find it:</strong> on desktop, go to <em>Academic Profile &gt; Behaviour &amp; Discipline</em>. On mobile, go to <em>Student Profile &gt; Behaviour &amp; Discipline</em>.</li>
+        </ul>
+        ${slides([
+          ['images/behaviour.jpg', 'Behaviour slide 1'],
+          ['images/behaviour-2.jpg', 'Behaviour slide 2'],
+          ['images/behaviour-3.jpg', 'Behaviour slide 3']
+        ])}`
+    },
+    cs: {
+      badge: 'CS',
+      title: 'Child switcher',
+      content: `
+        <p>If you have more than one child at Prem, you can move between them without signing out.</p>
+        <ul>
+          <li><strong>On desktop:</strong> select the drop-down menu next to your child’s name at the top of the dashboard.</li>
+          <li><strong>On mobile:</strong> tap the profile bar at the top to open the <em>Child Switcher</em>.</li>
+          <li><strong>What changes:</strong> the dashboard, timetable, grades and reports all switch to the child you choose.</li>
+        </ul>
+        ${slides([
+          ['images/child_switcher.jpg', 'Child switcher slide']
+        ])}`
+    }
+  };
 
-            <div class="card" onclick="openDrawer('bn')">
-                <div class="badge">BN</div>
-                <div class="card-title">Behavior Notes</div>
-                <div class="card-desc">Review logged achievements, positive choices, and support notes.</div>
-            </div>
+  const drawer = document.getElementById('drawer');
+  const overlay = document.getElementById('drawerOverlay');
+  const content = document.getElementById('drawerContent');
+  const modal = document.getElementById('imageModal');
+  const zoomed = document.getElementById('zoomedImg');
+  let lastFocus = null;
+  let lastSlide = null;
 
-            <div class="card" onclick="openDrawer('cs')">
-                <div class="badge">CS</div>
-                <div class="card-title">Child Switcher</div>
-                <div class="card-desc">Toggle views between siblings on both desktop and mobile layouts.</div>
-            </div>
-        </div>
-    </main>
+  function openDrawer(key){
+    const data = cardDetails[key];
+    if (!data) return;
+    lastFocus = document.activeElement;
+    document.getElementById('drawerBadge').textContent = data.badge;
+    document.getElementById('drawerTitle').textContent = data.title;
+    content.innerHTML = data.content;
+    content.scrollTop = 0;
+    overlay.classList.add('active');
+    drawer.classList.add('active');
+    document.body.classList.add('is-locked');
+    document.getElementById('drawerClose').focus();
+  }
 
-    <!-- Slide-over Drawer & Overlay -->
-    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-    
-    <div class="drawer" id="drawer">
-        <button class="drawer-close" onclick="closeDrawer()">&times;</button>
-        <div class="drawer-header">
-            <div class="badge" id="drawerBadge">--</div>
-            <div class="drawer-title" id="drawerTitle">Title</div>
-        </div>
-        <div class="drawer-content" id="drawerContent">
-            <!-- Content & Images dynamically loaded -->
-        </div>
-    </div>
+  function closeDrawer(){
+    overlay.classList.remove('active');
+    drawer.classList.remove('active');
+    document.body.classList.remove('is-locked');
+    if (lastFocus) lastFocus.focus();
+  }
 
-    <!-- Full-Screen Lightbox Zoom Modal -->
-    <div class="image-modal" id="imageModal" onclick="closeImageZoom()">
-        <img id="zoomedImg" src="" alt="Zoomed Screenshot">
-    </div>
+  function zoomImage(img){
+    lastSlide = img;
+    zoomed.src = img.src;
+    zoomed.alt = img.alt;
+    modal.classList.add('active');
+  }
 
-    <script>
-        const cardDetails = {
-            contact: {
-                badge: 'CO',
-                title: 'Contact School Office',
-                content: `
-                    <p>Contact our Senior School secretary Khun Kib at <a href="mailto:secretaryss@ptis.ac.th" style="color:var(--accent-green)">secretaryss@ptis.ac.th</a>, or by phone on <strong>(053) 301500, Ext 5300</strong>.</p>
-                `
-            },
-            la: {
-                badge: 'LA',
-                title: 'Login & Access',
-                content: `
-                    <p>Access ManageBac using your registered parent email address.</p>
-                    <ul>
-                        <li><strong>Global Access:</strong> Log in at <a href="https://ptis.managebac.com" target="_blank" style="color:var(--accent-green)">ptis.managebac.com</a>.</li>
-                        <li><strong>Sign In Options:</strong> Log in using your email address on record, or click <em>Sign in with Google or Microsoft</em>.</li>
-                        <li><strong>Mobile App Requirement:</strong> First-time logins must be completed via a web browser before accessing your account on the app.</li>
-                    </ul>
-                    <a href="https://ptis.managebac.com" target="_blank" class="btn-action">Go to Portal Login ↗</a>
-                    <p style="margin-top: 20px;"><strong>Reference Slides:</strong></p>
-                    <img src="images/login.jpg" class="slide-preview" alt="Login Slide 1" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/login-2.jpg" class="slide-preview" alt="Login Slide 2" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                `
-            },
-            at: {
-                badge: 'AT',
-                title: 'Attendance & Timetables',
-                content: `
-                    <p>Monitor your child's daily presence, class attendance codes, and weekly schedules across desktop and mobile views.</p>
-                    <ul>
-                        <li><strong>Daily & Lesson Tracking:</strong> Attendance is taken in homeroom every morning and during every individual lesson.</li>
-                        <li><strong>Attendance Codes & Comments:</strong> Review detailed status breakdowns (Present, Absent, Late, Off-campus activity, Medical center).</li>
-                        <li><strong>Mobile Navigation:</strong> Tap <em>Attendance & Timetable</em> on the main menu to view homeroom and weekly attendance summaries.</li>
-                        <li><strong>Toggle Views:</strong> Switch between <em>Calendar</em> and <em>Timetables</em> at the top of the mobile screen.</li>
-                        <li><strong>Exporting:</strong> Use <em>Export Timetables to PDF</em> to print or save your child's schedule.</li>
-                    </ul>
-                    <p style="margin-top: 20px;"><strong>Reference Slides:</strong></p>
-                    <img src="images/attendance.jpg" class="slide-preview" alt="Attendance Slide 1" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/attendance-2.jpg" class="slide-preview" alt="Attendance Slide 2" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/timetables.jpg" class="slide-preview" alt="Timetables Slide 1" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/timetables-2.jpg" class="slide-preview" alt="Timetables Slide 2" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                `
-            },
-            th: {
-                badge: 'TH',
-                title: 'Tasks & Homework',
-                content: `
-                    <p>Track academic deadlines, class assignments, and online lesson resources.</p>
-                    <ul>
-                        <li><strong>Desktop Calendar:</strong> View weekly calendars directly on the child's front page and select <em>"View All"</em> for a full overview.</li>
-                        <li><strong>Mobile Navigation:</strong> Tap <em>Tasks & Deadlines</em> on the main menu to see aggregated deadlines across subjects.</li>
-                        <li><strong>Task vs. Homework:</strong> Homework assignments default to a deadline cutoff.</li>
-                        <li><strong>Hover Details:</strong> Hover over any task on desktop or tap it on mobile to view submission parameters.</li>
-                    </ul>
-                    <p style="margin-top: 20px;"><strong>Reference Slides:</strong></p>
-                    <img src="images/tasks.jpg" class="slide-preview" alt="Tasks Slide 1" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/tasks-2.jpg" class="slide-preview" alt="Tasks Slide 2" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/tasks-3.jpg" class="slide-preview" alt="Tasks Slide 3" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/tasks-4.jpg" class="slide-preview" alt="Tasks Slide 4" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/tasks-5.jpg" class="slide-preview" alt="Tasks Slide 5" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                `
-            },
-            gr: {
-                badge: 'GR',
-                title: 'Grading & Term Reports',
-                content: `
-                    <p>Track real-time learning progress, criterion-based subject grades, unit curriculum overviews, and official PDF term reports.</p>
-                    <ul>
-                        <li><strong>Real-Time Grades:</strong> Grades update live as soon as teachers publish them.</li>
-                        <li><strong>Mobile Grade Access:</strong> Navigate to <em>Classes &gt; Assessment Grades</em> to toggle between terms/semesters.</li>
-                        <li><strong>Units & Curriculum:</strong> View inquiry concepts, ATL skills, and assessment criteria per subject unit.</li>
-                        <li><strong>Downloading Reports:</strong> Access historical PDF reports via <em>Student Profile &gt; Reports</em>.</li>
-                    </ul>
-                    <p style="margin-top: 20px;"><strong>Reference Slides:</strong></p>
-                    <img src="images/grading.jpg" class="slide-preview" alt="Grading Slide 1" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/grading-2.jpg" class="slide-preview" alt="Grading Slide 2" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/grading-3.jpg" class="slide-preview" alt="Grading Slide 3" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/grading-4.jpg" class="slide-preview" alt="Grading Slide 4" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/grading-5.jpg" class="slide-preview" alt="Grading Slide 5" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/reports.jpg" class="slide-preview" alt="Reports Slide 1" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/reports-2.jpg" class="slide-preview" alt="Reports Slide 2" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                `
-            },
-            bn: {
-                badge: 'BN',
-                title: 'Behavior Notes',
-                content: `
-                    <p>ManageBac features an internal reporting system for student behavior in accordance with Prem's pastoral policy.</p>
-                    <ul>
-                        <li><strong>Record of Behavior:</strong> Logs outstanding positive choices and areas needing redirection.</li>
-                        <li><strong>Support Tool:</strong> Used internally for pastoral care—not a punitive transcript record.</li>
-                        <li><strong>Annual Reset:</strong> All logged notes reset at the beginning of each academic year.</li>
-                        <li><strong>Access:</strong> Desktop users navigate to <em>Academic Profile &gt; Behaviour & Discipline</em>. Mobile users select <em>Student Profile &gt; Behaviour & Discipline</em>.</li>
-                    </ul>
-                    <p style="margin-top: 20px;"><strong>Reference Slides:</strong></p>
-                    <img src="images/behaviour.jpg" class="slide-preview" alt="Behaviour Slide 1" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/behaviour-2.jpg" class="slide-preview" alt="Behaviour Slide 2" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                    <img src="images/behaviour-3.jpg" class="slide-preview" alt="Behaviour Slide 3" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                `
-            },
-            cs: {
-                badge: 'CS',
-                title: 'Child Switcher',
-                content: `
-                    <p>Designed for families with multiple children enrolled at Prem to seamlessly switch profiles within a single login.</p>
-                    <ul>
-                        <li><strong>Desktop View:</strong> Click the drop-down menu next to your child's name at the top center of the dashboard to switch between primary and secondary students.</li>
-                        <li><strong>Mobile View:</strong> Tap the top profile header bar to open the <em>Child Switcher</em> bottom drawer.</li>
-                        <li><strong>Unified Access:</strong> Switching profiles updates all dashboard widgets, schedules, grades, and reports instantly.</li>
-                    </ul>
-                    <p style="margin-top: 20px;"><strong>Reference Slides:</strong></p>
-                    <img src="images/child_switcher.jpg" class="slide-preview" alt="Child Switcher Slide" onclick="zoomImage(this)">
-                    <div class="caption-text">🔍 Click image to enlarge slide</div>
-                `
-            }
-        };
+  function closeImageZoom(){
+    modal.classList.remove('active');
+    if (lastSlide) lastSlide.focus();
+  }
 
-        function toggleMobileMenu() {
-            const navWrapper = document.getElementById('navWrapper');
-            const toggleBtn = document.getElementById('menuToggle');
-            navWrapper.classList.toggle('active');
-            toggleBtn.innerText = navWrapper.classList.contains('active') ? '✕' : '☰';
-        }
+  document.querySelectorAll('[data-topic]').forEach(el =>
+    el.addEventListener('click', () => openDrawer(el.dataset.topic)));
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  modal.addEventListener('click', closeImageZoom);
 
-        function openDrawer(key) {
-            const data = cardDetails[key];
-            if (!data) return;
+  content.addEventListener('click', e => {
+    if (e.target.classList.contains('slide-preview')) zoomImage(e.target);
+  });
+  content.addEventListener('keydown', e => {
+    if (e.target.classList.contains('slide-preview') && (e.key === 'Enter' || e.key === ' ')){
+      e.preventDefault();
+      zoomImage(e.target);
+    }
+  });
 
-            document.getElementById('drawerBadge').innerText = data.badge;
-            document.getElementById('drawerTitle').innerText = data.title;
-            document.getElementById('drawerContent').innerHTML = data.content;
-
-            document.getElementById('drawerOverlay').classList.add('active');
-            document.getElementById('drawer').classList.add('active');
-
-            // Close mobile nav automatically if a drawer is opened from menu link
-            document.getElementById('navWrapper').classList.remove('active');
-            document.getElementById('menuToggle').innerText = '☰';
-        }
-
-        function closeDrawer() {
-            document.getElementById('drawerOverlay').classList.remove('active');
-            document.getElementById('drawer').classList.remove('active');
-        }
-
-        function zoomImage(imgElement) {
-            const modal = document.getElementById('imageModal');
-            const zoomedImg = document.getElementById('zoomedImg');
-            zoomedImg.src = imgElement.src;
-            modal.classList.add('active');
-        }
-
-        function closeImageZoom() {
-            document.getElementById('imageModal').classList.remove('active');
-        }
-    </script>
+  // Escape closes the enlarged slide first, then the drawer.
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (modal.classList.contains('active')) closeImageZoom();
+    else if (drawer.classList.contains('active')) closeDrawer();
+  });
+</script>
 </body>
 </html>
